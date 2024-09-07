@@ -79,7 +79,28 @@ Node* AVL::deleteNodeHelper(Node* root, int val)
     root -> val = temp -> val;
     root -> right = deleteNodeHelper(root -> right, temp->val);
 
+    int bf = getBalanceFactor(root);
+    if (bf >= -1 && bf <= 1) {
+        return root;
+    }
+    if (bf > 1 && getBalanceFactor(root -> left) > 0) {
+        return rightRotate(root);
+    }
+    if (bf > 1 && getBalanceFactor(root -> left) < 0) {
+        root -> left = leftRotate(root -> left);
+        return rightRotate(root);
+    }
+    if (bf < -1 && getBalanceFactor(root -> right) < 0) {
+        return leftRotate(root);
+    }
+    if (bf < -1 && getBalanceFactor(root -> right) > 0) {
+        root -> right = rightRotate(root -> right);
+        return leftRotate(root);
+    }
     return root;
+
+
+
 }
 
 Node* AVL::searchNodeHelper(Node* root, int val)
@@ -173,7 +194,6 @@ Node* AVL::balance(Node* node, int val) {
 
     return node;
 }
-
 
 //PUBLIC FUNCTIONS
 //traversals
